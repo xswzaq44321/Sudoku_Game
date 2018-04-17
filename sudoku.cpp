@@ -1,4 +1,5 @@
 #include "sudoku.h"
+#include <cstdio>
 #define BLOCKI(a, i) (i / 3 + static_cast<int>(a / 3) * 3)
 #define BLOCKJ(b, i) (i % 3 + static_cast<int>(b / 3) * 3)
 
@@ -32,14 +33,14 @@ void Sudoku::takeNote(int a, int b){
     for(int i = 0; i < 9; ++i){ // check block
         char blockI, blockJ;
         blockI = BLOCKI(a, i);
-        blockj = BLOCKJ(b, i);
+        blockJ = BLOCKJ(b, i);
         if(quiz[blockI][blockJ] != 0){
             note[a][b][ quiz[blockI][blockJ] - 1 ] = 0;
         }
     }
 }
 
-void Sudoku::chearNote(int a, int b){
+void Sudoku::clearNote(int a, int b){
     for(int i = 0; i < 9; ++i){
         note[a][b][i] = 0;
     }
@@ -144,7 +145,7 @@ int Sudoku::check(int a, int b){
     return initial ? 0 : checkSpecial(a, b);
 }
 
-bool Sudoku::checkUnity(int arr[]){
+bool Sudoku::checkUnity(char arr[]){
     int arr_unity[9];
 
     for(int i = 0; i < 9; ++i){
@@ -163,11 +164,11 @@ bool Sudoku::checkUnity(int arr[]){
 
 bool Sudoku::isCorrect(){
     bool check_result;
-    int check_arr[9];
-    int location;
-    for(int i = 0; i < 81; i += 9){
+    char check_arr[9];
+    int blockI, blockJ;
+    for(int i = 0; i < 9; ++i){
         for(int j = 0; j < 9; ++j){
-            check_arr[j] = quiz[i + j];
+            check_arr[j] = quiz[i][j];
         }
         check_result = checkUnity(check_arr);
         if(check_result == false){
@@ -176,7 +177,7 @@ bool Sudoku::isCorrect(){
     }
     for(int i = 0; i < 9; ++i){
         for(int j = 0; j < 9; ++j){
-            check_arr[j] = quiz[i + 9 * j];
+            check_arr[j] = quiz[i][9 * j];
         }
         check_result = checkUnity(check_arr);
         if(check_result == false){
@@ -185,8 +186,9 @@ bool Sudoku::isCorrect(){
     }
     for(int i = 0; i < 9; ++i){
         for(int j = 0; j < 9; ++j){
-            location = 27 * (i / 3) + 3 * (i % 3) + 9 * (j / 3) + (j % 3);
-            check_arr[j] = quiz[location];
+            blockI = BLOCKI((i / 3) * 3, j);
+            blockJ = BLOCKJ((i % 3) * 3, j);
+            check_arr[j] = quiz[blockI][blockJ];
         }
         check_result = checkUnity(check_arr);
         if(check_result == false){
@@ -197,6 +199,7 @@ bool Sudoku::isCorrect(){
 }
 
 void Sudoku::solve(){
+    int upDate;
     do{
         upDate = 0;
         for(int i = 0; i < 9; ++i){
