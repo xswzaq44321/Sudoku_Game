@@ -1,5 +1,5 @@
-#include "sudoku.h"
 #include <cstdio>
+#include "sudoku.h"
 #define BLOCKI(a, i) (i / 3 + static_cast<int>(a / 3) * 3)
 #define BLOCKJ(b, i) (i % 3 + static_cast<int>(b / 3) * 3)
 
@@ -11,6 +11,23 @@ Sudoku::Sudoku(const char initMap[][9]){
         for(int j = 0; j < 9; ++j){
             quiz[i][j] = initMap[i][j];
         }
+    }
+}
+
+void Sudoku::setQuiz(int i, int j, char n){
+    quiz[i][j] = n;
+}
+
+char Sudoku::getQuiz(int i, int j){
+    return quiz[i][j];
+}
+
+void Sudoku::printQuiz(){
+    for(int i = 0; i < 9; ++i){
+        for(int j = 0; j < 9; ++j){
+            printf("%d ", quiz[i][j]);
+        }
+        printf("\n");
     }
 }
 
@@ -49,19 +66,19 @@ void Sudoku::clearNote(int a, int b){
 bool Sudoku::checkDuplicate(int a, int b, int n){
     char blockI, blockJ;
     for(int i = 0; i < 9; ++i){ // check row
-        if(quiz[a][i] == n){
+        if(i != b && quiz[a][i] == n){
             return true;
         }
     }
     for(int i = 0; i < 9; ++i){ // check column
-        if(quiz[i][b] == n){
+        if(i != a && quiz[i][b] == n){
             return true;
         }
     }
     for(int i = 0; i < 9; ++i){ // check block
         blockI = BLOCKI(a, i);
         blockJ = BLOCKJ(b, i);
-        if(quiz[blockI][blockJ] == n){
+        if((blockI != a && blockJ != b) && quiz[blockI][blockJ] == n){
             return true;
         }
     }
@@ -69,7 +86,8 @@ bool Sudoku::checkDuplicate(int a, int b, int n){
 }
 
 int Sudoku::checkSpecial(int a, int b){
-    char filled[9] = {0}; //"filled" is used to record how many time a number appears in the notes
+    char filled[9] = {0}; //"filled" is used to record how many time a number appears in the "notes of row, column, block"
+
     for(int i = 0; i < 9; ++i){ //check row
         for(int j = 0; j < 9; ++j){
             if(note[a][i][j]){
@@ -77,12 +95,10 @@ int Sudoku::checkSpecial(int a, int b){
             }
         }
     }
-
-    //if a number only appears once in the note,
-    //that means that number is the only one that can fit in the point.
-
     for(int i = 0; i < 9; ++i){
-        //since the note of a point will only update when processed by "check()"
+        //if a number only appears once in the "note of the row, column, block",
+        //that means that number is the only one that can fit in the point.
+        //since the note of the point will only update when "check()" processed
         //therefore, we need to check what had filled in before
         if(filled[i] == 1 && !checkDuplicate(a, b, i+1)){
             return i + 1;
@@ -145,54 +161,13 @@ int Sudoku::check(int a, int b){
     return initial ? 0 : checkSpecial(a, b);
 }
 
-bool Sudoku::checkUnity(char arr[]){
-    int arr_unity[9];
-
-    for(int i = 0; i < 9; ++i){
-        arr_unity[i] = 0;
-    }
-    for(int i = 0; i < 9; ++i){
-        ++arr_unity[arr[i] - 1];
-    }
-    for(int i = 0; i < 9; ++i){
-        if(arr_unity[i] != 1){
-            return false;
-        }
-    }
-    return true;
-}
-
 bool Sudoku::isCorrect(){
-    bool check_result;
-    char check_arr[9];
-    int blockI, blockJ;
+    bool checkResult;
     for(int i = 0; i < 9; ++i){
         for(int j = 0; j < 9; ++j){
-            check_arr[j] = quiz[i][j];
-        }
-        check_result = checkUnity(check_arr);
-        if(check_result == false){
-            return false;
-        }
-    }
-    for(int i = 0; i < 9; ++i){
-        for(int j = 0; j < 9; ++j){
-            check_arr[j] = quiz[i][9 * j];
-        }
-        check_result = checkUnity(check_arr);
-        if(check_result == false){
-            return false;
-        }
-    }
-    for(int i = 0; i < 9; ++i){
-        for(int j = 0; j < 9; ++j){
-            blockI = BLOCKI((i / 3) * 3, j);
-            blockJ = BLOCKJ((i % 3) * 3, j);
-            check_arr[j] = quiz[blockI][blockJ];
-        }
-        check_result = checkUnity(check_arr);
-        if(check_result == false){
-            return false;
+            if(checkDuplicate(i, j, quiz[i][j])){
+                return false;
+            }
         }
     }
     return true;
@@ -213,6 +188,6 @@ void Sudoku::solve(){
                 }
             }
         }
-        initial = 0;
+        initial = false;
     }while(upDate);
 }
