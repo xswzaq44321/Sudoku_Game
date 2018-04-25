@@ -4,7 +4,6 @@
 #include <QMainWindow>
 #include <QGraphicsScene>
 #include <QGraphicsPixmapItem>
-#include "number.h"
 
 namespace Ui {
 class MainWindow;
