@@ -30,16 +30,33 @@ char Sudoku::getQuiz(int i, int j){
 	return map[i][j];
 }
 
+void Sudoku::setDif(char i){
+    dif = i;
+}
+
+char Sudoku::getDif(){
+    return dif;
+}
+
+void Sudoku::setNumberCount(int i){
+    numberCount = i;
+}
+
+int Sudoku::getNumberCount(){
+    return numberCount;
+}
+
 void Sudoku::printQuiz(){
-	printf("=====================\n");
+    fprintf(stderr, "=====================\n");
 	for(int i = 0; i < 9; ++i){
 		for(int j = 0; j < 9; ++j){
-			printf(map[i][j] ? GRN "%d " RESET : "%d ", map[i][j]);
-			printf(j % 3 == 2 ? "|" : "");
+            fprintf(stderr, map[i][j] ? GRN "%d " RESET : "%d ", map[i][j]);
+            fprintf(stderr, j % 3 == 2 ? "|" : "");
 		}
-		printf(i % 3 == 2 ? "\n---------------------\n" :"\n");
+        fprintf(stderr, i % 3 == 2 ? "\n---------------------\n" :"\n");
 	}
-	printf("=====================\n");
+    fprintf(stderr, "=====================\n");
+    fflush(stderr);
 }
 
 void Sudoku::takeNote(int a, int b){
@@ -163,7 +180,7 @@ int Sudoku::check(int a, int b){
 		}
 	}
 	if(howMany == 0){
-		fprintf(stderr, "error! Can't fill any number on [%d, %d]\n", a, b);
+//        fprintf(stderr, "error! Can't fill any number on [%d, %d]\n", a, b);
 		return 0;
 	}else if(howMany == 1){
 		return whatIsIt + 1;
@@ -208,7 +225,7 @@ bool Sudoku::isCorrect(){
 	return true;
 }
 
-void Sudoku::subCreate(int numberCount){
+void Sudoku::subCreate(){
 	char temp, tempI, tempJ, count = 0;
 	while(count < numberCount){
 		temp = rand() % 9 + 1;
@@ -221,17 +238,18 @@ void Sudoku::subCreate(int numberCount){
 	}
 }
 
-void Sudoku::create(int numberCount){
+void Sudoku::create(){
 	Sudoku temp;
 	srand(time(NULL));
 	bool result = false;
 	while(!result){
 		this->clearData();
-		subCreate(numberCount);
+        subCreate();
 		temp = *this;
 		temp.solve();
 		result = temp.isCorrect();
-	}
+    }
+    setDifficulty();
 }
 
 void Sudoku::clearData(){
@@ -244,16 +262,14 @@ void Sudoku::clearData(){
 	initial = true;
 }
 
-void Sudoku::setDif(int dif){ // dif = [0,1,2,3,4,5]
-	char number = 25 - dif * 5;
-	if(number + dif > 80){
-		return;
-	}
-	srand(time(NULL));
+void Sudoku::setDifficulty(){
+    if(dif <= 1) return;
+    char number = dif * 5;
+    srand(time(NULL));
 	char tempI, tempJ;
 	Sudoku answer;
 	answer = *this;
-	answer.solve();
+    answer.solve();
 	for(int i = 0; i < number; ++i){
 		tempI = rand() % 9;
 		tempJ = rand() % 9;
@@ -263,5 +279,16 @@ void Sudoku::setDif(int dif){ // dif = [0,1,2,3,4,5]
 		}else{
 			map[tempI][tempJ] = answer.map[tempI][tempJ];
 		}
-	}
+    }
+}
+
+bool Sudoku::mapIsEmpty(){
+    for(int i = 0; i < 9; ++i){
+        for(int j = 0; j < 9; ++j){
+            if(map[i][j]){
+                return false;
+            }
+        }
+    }
+    return true;
 }
