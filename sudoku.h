@@ -7,6 +7,10 @@ class Sudoku
 		Sudoku(const char initMap[][9]);
 		void setQuiz(int i, int j, char n);
 		char getQuiz(int i, int j);
+        void setDif(char i);
+        char getDif();
+        void setNumberCount(int i);
+        int getNumberCount();
 		void printQuiz();
 		void printAns();
 		void takeNote(int a, int b);
@@ -16,13 +20,16 @@ class Sudoku
 		int check(int a, int b);
 		void solve();
 		bool isCorrect();
-		void create(int numberCount = 25);
-		void subCreate(int numberCount);
+        void create();
+        void subCreate();
 		void clearData();
-		void setDif(int dif);
+        void setDifficulty();
+        bool mapIsEmpty();
 	private:
 		char map[9][9];
 		char note[9][9][9];
 		bool initial;
+        char dif = 0; // dif = [0,1,2,3,4,5]
+        int numberCount = 25;
 };
 

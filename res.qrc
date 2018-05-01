@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/numbers">
+        <file alias="number_empty_selected">res/number_empty_selected.png</file>
+    </qresource>
+</RCC>
