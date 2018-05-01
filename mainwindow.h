@@ -10,6 +10,7 @@
 #include <QLayout>
 #include <vector>
 #include <QSignalMapper>
+#include <QKeyEvent>
 #include "sudoku.h"
 
 namespace Ui {
@@ -30,11 +31,19 @@ private slots:
     void on_comboBox_currentIndexChanged(int index);
     void on_pushButton_solve_clicked();
     void button_pressed(int id);
+    virtual void keyPressEvent(QKeyEvent *e);
+
+    void on_pushButton_clear_clicked();
+
+    void on_pushButton_hint_clicked();
 
 private:
     Sudoku quiz;
+    Sudoku player;
     std::vector<Sudoku> ans;
     QPushButton *button[9][9];
+    int nowI = 0, nowJ = 0;
+    bool clickAble = true;
 
     Ui::MainWindow *ui;
 };

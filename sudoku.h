@@ -5,8 +5,8 @@ class Sudoku
 	public:
 		Sudoku();
 		Sudoku(const char initMap[][9]);
-		void setQuiz(int i, int j, char n);
-		char getQuiz(int i, int j);
+        void setMap(int i, int j, char n);
+        char getMap(int i, int j);
         void setDif(char i);
         char getDif();
         void setNumberCount(int i);
@@ -25,6 +25,7 @@ class Sudoku
 		void clearData();
         void setDifficulty();
         bool mapIsEmpty();
+        bool mapIsFinished();
 	private:
 		char map[9][9];
 		char note[9][9][9];

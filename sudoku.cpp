@@ -22,11 +22,11 @@ Sudoku::Sudoku(const char initMap[][9]){
 	}
 }
 
-void Sudoku::setQuiz(int i, int j, char n){
+void Sudoku::setMap(int i, int j, char n){
 	map[i][j] = n;
 }
 
-char Sudoku::getQuiz(int i, int j){
+char Sudoku::getMap(int i, int j){
 	return map[i][j];
 }
 
@@ -255,7 +255,7 @@ void Sudoku::create(){
 void Sudoku::clearData(){
 	for(int i = 0; i < 9; ++i){
 		for(int j = 0; j < 9; ++j){
-			this->setQuiz(i, j, 0);
+            this->setMap(i, j, 0);
 			this->clearNote(i, j);
 		}
 	}
@@ -286,6 +286,17 @@ bool Sudoku::mapIsEmpty(){
     for(int i = 0; i < 9; ++i){
         for(int j = 0; j < 9; ++j){
             if(map[i][j]){
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+bool Sudoku::mapIsFinished(){
+    for(int i = 0; i < 9; ++i){
+        for(int j = 0; j < 9; ++j){
+            if(map[i][j] == 0){
                 return false;
             }
         }
