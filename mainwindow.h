@@ -30,7 +30,6 @@ private slots:
     void on_comboBox_currentIndexChanged(int index);
     void on_pushButton_solve_clicked();
     void button_pressed(int id);
-    void button_down(int i, int j);
 
 private:
     Sudoku quiz;
