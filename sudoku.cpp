@@ -171,31 +171,26 @@ int Sudoku::checkSpecial(int a, int b){
 }
 
 int Sudoku::check(int a, int b){
-	int howMany = 0, whatIsIt = 0;
-	for(int i = 0; i < 9; ++i){
-		takeNote(a, b);
+    int howMany = 0, whatIsIt = 0;
+    takeNote(a, b);
+    for(int i = 0; i < 9; ++i){
 		if(note[a][b][i] == 1){ // check how many element are in the note
 			howMany++;
 			whatIsIt = i;
 		}
 	}
 	if(howMany == 0){
-//        fprintf(stderr, "error! Can't fill any number on [%d, %d]\n", a, b);
+        fprintf(stderr, "error! Can't fill any number on [%d, %d]\n", a, b);
 		return 0;
 	}else if(howMany == 1){
 		return whatIsIt + 1;
 	}
 
-	return checkSpecial(a, b);
+    return initial ? 0 : checkSpecial(a, b);
 }
 
 void Sudoku::solve(){
-	int upDate;
-	for(int i = 0; i < 9; ++i){
-		for(int j = 0; j < 9; ++j){
-			takeNote(i, j);
-		}
-	}
+    int upDate;
 	do{
 		upDate = 0;
 		for(int i = 0; i < 9; ++i){

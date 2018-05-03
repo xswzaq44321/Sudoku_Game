@@ -67,9 +67,10 @@ void MainWindow::on_pushButton_solve_clicked()
         return;
     }
     Sudoku temp(player);
+    temp.printQuiz();
     temp.solve();
+    temp.printQuiz();
     ans.push_back(temp);
-    clickAble = false;
     for(int i = 0; i < 9; ++i){
         for(int j = 0; j < 9; ++j){
             if(player.getMap(i, j) != ans[0].getMap(i, j)){

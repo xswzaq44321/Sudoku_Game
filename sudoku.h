@@ -11,8 +11,7 @@ class Sudoku
         char getDif();
         void setNumberCount(int i);
         int getNumberCount();
-		void printQuiz();
-		void printAns();
+        void printQuiz();
 		void takeNote(int a, int b);
 		void clearNote(int a, int b);
 		bool checkDuplicate(int a, int b, int n);
@@ -27,9 +26,9 @@ class Sudoku
         bool mapIsEmpty();
         bool mapIsFinished();
 	private:
-		char map[9][9];
-		char note[9][9][9];
-		bool initial;
+        char map[9][9] = {{0}};
+        char note[9][9][9] = {{{0}}};
+        bool initial = true;
         char dif = 0; // dif = [0,1,2,3,4,5]
         int numberCount = 25;
 };
