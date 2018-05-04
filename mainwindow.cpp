@@ -63,14 +63,27 @@ void MainWindow::on_comboBox_currentIndexChanged(int index)
 
 void MainWindow::on_pushButton_solve_clicked()
 {
+    Sudoku comAns(player);
+    qDebug() << "solve clicked";
     if(player.mapIsEmpty()){
         return;
     }
-    Sudoku temp(player);
-    temp.printQuiz();
-    temp.solve();
-    temp.printQuiz();
-    ans.push_back(temp);
+    ans.clear();
+    player.printQuiz();
+    comAns.solve();
+    ans = player.multiSolve();
+    ans.insert(ans.begin(), comAns);
+    qDebug() << ans.size();
+    ui->comboBox_ans->addItem("Common Sol");
+    for(int i = 1; i < ans.size(); ++i){ // Sol 0 = Common Sol
+        char temp[100];
+        sprintf(temp, "Sol %d", i);
+        QString qtemp(temp);
+        ui->comboBox_ans->addItem(qtemp);
+    }
+    for(std::vector<Sudoku>::iterator it = ans.begin(); it != ans.end(); ++it){
+        it->printQuiz();
+    }
     for(int i = 0; i < 9; ++i){
         for(int j = 0; j < 9; ++j){
             if(player.getMap(i, j) != ans[0].getMap(i, j)){
@@ -168,6 +181,7 @@ void MainWindow::on_pushButton_clear_clicked()
     quiz.clearData();
     clickAble = true;
     ui->player_status->setText("Status");
+    ui->comboBox_ans->clear();
     for(int i = 0; i < 9; ++i){
         for(int j = 0; j < 9; ++j){
             button[i][j]->setText("");
@@ -184,6 +198,30 @@ void MainWindow::on_pushButton_hint_clicked()
         if(refAns.getMap(nowI, nowJ) != 0){
             player.setMap(nowI, nowJ, refAns.getMap(nowI, nowJ));
             button[nowI][nowJ]->setText(QString::number(player.getMap(nowI, nowJ)));
+        }
+    }
+}
+
+void MainWindow::on_comboBox_ans_currentIndexChanged(int index)
+{
+    qDebug() << "ans index = " << index;
+    if(index < 0 || index > ans.size()){
+        return;
+    }
+    for(int i = 0; i < 9; ++i){
+        for(int j = 0; j < 9; ++j){
+            if(player.getMap(i, j) == 0){
+                button[i][j]->setText("");
+                button[i][j]->setStyleSheet("");
+            }
+        }
+    }
+    for(int i = 0; i < 9; ++i){
+        for(int j = 0; j < 9; ++j){
+            if(player.getMap(i, j) != ans.at(index).getMap(i, j)){
+                button[i][j]->setText(QString::number(ans.at(index).getMap(i ,j)));
+                button[i][j]->setStyleSheet("color: rgb(0, 181, 46);");
+            }
         }
     }
 }

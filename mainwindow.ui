@@ -159,6 +159,9 @@ font: 75 20pt &quot;Andy&quot;;</string>
       <height>22</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">font: 75 14pt &quot;Andy&quot;;</string>
+    </property>
    </widget>
    <widget class="QPushButton" name="pushButton_note">
     <property name="geometry">
