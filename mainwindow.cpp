@@ -51,7 +51,7 @@ void MainWindow::on_pushButton_new_clicked()
     }
 }
 
-void MainWindow::on_comboBox_currentIndexChanged(int index)
+void MainWindow::on_comboBox_difficulty_currentIndexChanged(int index)
 {
     if(index == 0){
         quiz.setNumberCount(25);
@@ -63,32 +63,40 @@ void MainWindow::on_comboBox_currentIndexChanged(int index)
 
 void MainWindow::on_pushButton_solve_clicked()
 {
-    Sudoku comAns(player);
     qDebug() << "solve clicked";
     if(player.mapIsEmpty()){
         return;
     }
+    if(quiz.mapIsEmpty()){
+        quiz = player;
+    }
+    Sudoku comAns(quiz);
     ans.clear();
-    player.printQuiz();
+    quiz.printQuiz();
     comAns.solve();
-    ans = player.multiSolve();
+    ans = quiz.multiSolve();
     ans.insert(ans.begin(), comAns);
     qDebug() << ans.size();
     ui->comboBox_ans->addItem("Common Sol");
-    for(int i = 1; i < ans.size(); ++i){ // Sol 0 = Common Sol
+    for(int i = 1; i < ans.size(); ++i){ //set combox texts
         char temp[100];
-        sprintf(temp, "Sol %d", i);
+        sprintf(temp, "Sol %d", i); // Sol 0 = Common Sol
         QString qtemp(temp);
         ui->comboBox_ans->addItem(qtemp);
     }
     for(std::vector<Sudoku>::iterator it = ans.begin(); it != ans.end(); ++it){
-        it->printQuiz();
+        it->printQuiz(); // debug print
     }
+
     for(int i = 0; i < 9; ++i){
         for(int j = 0; j < 9; ++j){
             if(player.getMap(i, j) != ans[0].getMap(i, j)){
-                button[i][j]->setText(QString::number(ans[0].getMap(i ,j)));
-                button[i][j]->setStyleSheet("color: rgb(0, 181, 46);");
+                button[i][j]->setText(QString::number(ans[0].getMap(i, j)));
+                if(player.getMap(i, j) != 0){
+                    button[i][j]->setStyleSheet("color: rgb(237, 28, 36)");
+                }else{
+                    button[i][j]->setStyleSheet("color: rgb(0, 181, 46);");
+                }
             }
         }
     }
@@ -165,7 +173,7 @@ void MainWindow::keyPressEvent(QKeyEvent *e){
         }
         if(player.mapIsFinished()){
             if(player.isCorrect()){
-                ui->player_status->setText("You Won!");
+                ui->player_status->setText("You Win!");
                 clickAble = false;
             }else{
                 ui->player_status->setText("something \nwrong...");
@@ -176,9 +184,9 @@ void MainWindow::keyPressEvent(QKeyEvent *e){
 
 void MainWindow::on_pushButton_clear_clicked()
 {
+    quiz.clearData();
     player.clearData();
     ans.clear();
-    quiz.clearData();
     clickAble = true;
     ui->player_status->setText("Status");
     ui->comboBox_ans->clear();
@@ -192,7 +200,7 @@ void MainWindow::on_pushButton_clear_clicked()
 
 void MainWindow::on_pushButton_hint_clicked()
 {
-    if(player.getMap(nowI, nowJ) == 0){
+    if(quiz.getMap(nowI, nowJ) == 0){
         Sudoku refAns(quiz);
         refAns.solve();
         if(refAns.getMap(nowI, nowJ) != 0){
@@ -220,7 +228,11 @@ void MainWindow::on_comboBox_ans_currentIndexChanged(int index)
         for(int j = 0; j < 9; ++j){
             if(player.getMap(i, j) != ans.at(index).getMap(i, j)){
                 button[i][j]->setText(QString::number(ans.at(index).getMap(i ,j)));
-                button[i][j]->setStyleSheet("color: rgb(0, 181, 46);");
+                if(player.getMap(i, j) != 0){
+                    button[i][j]->setStyleSheet("color: rgb(237, 28, 36)");
+                }else{
+                    button[i][j]->setStyleSheet("color: rgb(0, 181, 46);");
+                }
             }
         }
     }

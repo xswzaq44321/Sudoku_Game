@@ -10,10 +10,12 @@
 #define RESET "\x1B[0m"
 
 Sudoku::Sudoku(){
+    srand(time(NULL));
     this->clearData();
 }
 
 Sudoku::Sudoku(const char initMap[][9]){
+    srand(time(NULL));
     this->clearData();
     for(int i = 0; i < 9; ++i){
         for(int j = 0; j < 9; ++j){
@@ -272,7 +274,6 @@ void Sudoku::subCreate(){
 
 void Sudoku::create(){
     Sudoku temp;
-    srand(time(NULL));
     bool result = false;
     while(!result){
         this->clearData();
@@ -297,7 +298,6 @@ void Sudoku::clearData(){
 void Sudoku::setDifficulty(){
     if(dif <= 1) return;
     char number = dif * 5;
-    srand(time(NULL));
     char tempI, tempJ;
     Sudoku answer;
     answer = *this;

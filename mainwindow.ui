@@ -39,7 +39,7 @@
      <string>New Puzzle</string>
     </property>
    </widget>
-   <widget class="QComboBox" name="comboBox">
+   <widget class="QComboBox" name="comboBox_difficulty">
     <property name="geometry">
      <rect>
       <x>540</x>
@@ -154,7 +154,7 @@ font: 75 20pt &quot;Andy&quot;;</string>
     <property name="geometry">
      <rect>
       <x>540</x>
-      <y>490</y>
+      <y>510</y>
       <width>131</width>
       <height>22</height>
      </rect>
