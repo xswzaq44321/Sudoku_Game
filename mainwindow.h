@@ -32,10 +32,9 @@ private slots:
     void on_pushButton_solve_clicked();
     void button_pressed(int id);
     virtual void keyPressEvent(QKeyEvent *e);
-
     void on_pushButton_clear_clicked();
-
     void on_pushButton_hint_clicked();
+    void on_comboBox_ans_currentIndexChanged(int index);
 
 private:
     Sudoku quiz;
