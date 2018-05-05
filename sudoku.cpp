@@ -24,31 +24,37 @@ Sudoku::Sudoku(const char initMap[][9]){
     }
 }
 
-void Sudoku::setMap(int i, int j, char n){
+void Sudoku::setMap(int i, int j, const char n){
+    if(i < 0 || i > 8 || j < 0 || j > 8){
+        return;
+    }
     map[i][j] = n;
 }
 
-char Sudoku::getMap(int i, int j){
+char Sudoku::getMap(int i, int j)const {
+    if(i < 0 || i > 8 || j < 0 || j > 8){
+        return -1; // -1 represents fail to get map data
+    }
     return map[i][j];
 }
 
-void Sudoku::setDif(char i){
+void Sudoku::setDif(const char i){
     dif = i;
 }
 
-char Sudoku::getDif(){
+char Sudoku::getDif()const {
     return dif;
 }
 
-void Sudoku::setNumberCount(int i){
+void Sudoku::setNumberCount(const int i){
     numberCount = i;
 }
 
-int Sudoku::getNumberCount(){
+int Sudoku::getNumberCount()const {
     return numberCount;
 }
 
-void Sudoku::printQuiz(){
+void Sudoku::printMap()const {
     fprintf(stderr, "=====================\n");
     for(int i = 0; i < 9; ++i){
         for(int j = 0; j < 9; ++j){
@@ -61,7 +67,7 @@ void Sudoku::printQuiz(){
     fflush(stderr);
 }
 
-int Sudoku::getFirstZeroIndex(){
+int Sudoku::getFirstZeroIndex()const {
     for(int i = 0; i < 81; ++i){
         if(map[i / 9][i % 9] == 0){
             return i;
@@ -87,7 +93,7 @@ void Sudoku::takeNote(int a, int b){
         }
     }
     for(int i = 0; i < 9; ++i){ // check block
-        char blockI, blockJ;
+        int blockI, blockJ;
         blockI = BLOCKI(a, i);
         blockJ = BLOCKJ(b, i);
         if(map[blockI][blockJ] != 0){
@@ -103,7 +109,7 @@ void Sudoku::clearNote(int a, int b){
 }
 
 bool Sudoku::checkDuplicate(int a, int b, int n){
-    char blockI, blockJ;
+    int blockI, blockJ;
     for(int i = 0; i < 9; ++i){ // check row
         if(i != b && map[a][i] == n){
             return true;
@@ -124,7 +130,7 @@ bool Sudoku::checkDuplicate(int a, int b, int n){
     return false;
 }
 
-int Sudoku::checkSpecial(int a, int b){
+char Sudoku::checkSpecial(int a, int b){
     char filled[9] = {0}; //"filled" is used to record how many time a number appears in the "notes of row, column, block"
 
     for(int i = 0; i < 9; ++i){ //check row
@@ -140,7 +146,7 @@ int Sudoku::checkSpecial(int a, int b){
         //since the note of the point will only update when "check()" processed
         //therefore, we need to check what had filled in before
         if(filled[i] == 1 && !checkDuplicate(a, b, i+1)){
-            return i + 1;
+            return static_cast<char>(i + 1);
         }
     }
 
@@ -156,7 +162,7 @@ int Sudoku::checkSpecial(int a, int b){
     }
     for(int i = 0; i < 9; ++i){
         if(filled[i] == 1 && !checkDuplicate(a, b, i+1)){
-            return i + 1;
+            return static_cast<char>(i + 1);
         }
     }
 
@@ -165,7 +171,7 @@ int Sudoku::checkSpecial(int a, int b){
     }
     for(int i = 0; i < 9; ++i){ //check block
         for(int j = 0; j < 9; ++j){
-            char blockI, blockJ;
+            int blockI, blockJ;
             blockI = BLOCKI(a, i);
             blockJ = BLOCKJ(b, i);
             if(note[blockI][blockJ][j]){
@@ -175,14 +181,14 @@ int Sudoku::checkSpecial(int a, int b){
     }
     for(int i = 0; i < 9; ++i){
         if(filled[i] == 1 && !checkDuplicate(a, b, i+1)){
-            return i + 1;
+            return static_cast<char>(i + 1);
         }
     }
     return 0;
 }
 
-int Sudoku::check(int a, int b){
-    int howMany = 0, whatIsIt = 0;
+char Sudoku::check(int a, int b){
+    char howMany = 0, whatIsIt = 0;
     takeNote(a, b);
     for(int i = 0; i < 9; ++i){
         if(note[a][b][i] == 1){ // check how many element are in the note
@@ -240,10 +246,10 @@ void Sudoku::bruteSolve(Sudoku quest, vector<Sudoku>& ans){
 }
 
 vector<Sudoku> Sudoku::multiSolve(){
-    Sudoku temp;
-    temp = *this;
+    Sudoku temp(*this);
     vector<Sudoku> answer;
     temp.solve();
+    answer.push_back(temp);
     temp.bruteSolve(temp, answer);
     return answer;
 }
@@ -260,7 +266,7 @@ bool Sudoku::isCorrect(){
 }
 
 void Sudoku::subCreate(){
-    char temp, tempI, tempJ, count = 0;
+    int temp, tempI, tempJ, count = 0;
     while(count < numberCount){
         temp = rand() % 9 + 1;
         tempI = rand() % 9;
@@ -296,9 +302,9 @@ void Sudoku::clearData(){
 }
 
 void Sudoku::setDifficulty(){
-    if(dif <= 1) return;
-    char number = dif * 5;
-    char tempI, tempJ;
+    if(dif == 0) return;
+    int number = dif * 5;
+    int tempI, tempJ;
     Sudoku answer;
     answer = *this;
     answer.solve();

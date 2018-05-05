@@ -40,12 +40,12 @@ void MainWindow::on_pushButton_new_clicked()
     }
     quiz.create();
     player = quiz;
-    quiz.printQuiz();
+    quiz.printMap();
     for(int i = 0; i < 9; ++i){
         for(int j = 0; j < 9; ++j){
             if(quiz.getMap(i, j) != 0){
                 button[i][j]->setText(QString::number(quiz.getMap(i, j)));
-                button[i][j]->setStyleSheet("color: rgb(47, 56, 176);");
+                button[i][j]->setStyleSheet(blueText);
             }
         }
     }
@@ -53,11 +53,6 @@ void MainWindow::on_pushButton_new_clicked()
 
 void MainWindow::on_comboBox_difficulty_currentIndexChanged(int index)
 {
-    if(index == 0){
-        quiz.setNumberCount(25);
-    }else{
-        quiz.setNumberCount(30);
-    }
     quiz.setDif((char)index);
 }
 
@@ -70,22 +65,19 @@ void MainWindow::on_pushButton_solve_clicked()
     if(quiz.mapIsEmpty()){
         quiz = player;
     }
-    Sudoku comAns(quiz);
     ans.clear();
-    quiz.printQuiz();
-    comAns.solve();
+    quiz.printMap();
     ans = quiz.multiSolve();
-    ans.insert(ans.begin(), comAns);
-    qDebug() << ans.size();
+    qDebug() << "ans.size() = " << ans.size();
     ui->comboBox_ans->addItem("Common Sol");
-    for(int i = 1; i < ans.size(); ++i){ //set combox texts
+    for(int i = 1; static_cast<uint>(i) < ans.size(); ++i){ //set combox texts
         char temp[100];
         sprintf(temp, "Sol %d", i); // Sol 0 = Common Sol
         QString qtemp(temp);
         ui->comboBox_ans->addItem(qtemp);
     }
     for(std::vector<Sudoku>::iterator it = ans.begin(); it != ans.end(); ++it){
-        it->printQuiz(); // debug print
+        it->printMap(); // debug print
     }
 
     for(int i = 0; i < 9; ++i){
@@ -93,9 +85,9 @@ void MainWindow::on_pushButton_solve_clicked()
             if(player.getMap(i, j) != ans[0].getMap(i, j)){
                 button[i][j]->setText(QString::number(ans[0].getMap(i, j)));
                 if(player.getMap(i, j) != 0){
-                    button[i][j]->setStyleSheet("color: rgb(237, 28, 36)");
+                    button[i][j]->setStyleSheet(redText);
                 }else{
-                    button[i][j]->setStyleSheet("color: rgb(0, 181, 46);");
+                    button[i][j]->setStyleSheet(greenText);
                 }
             }
         }
@@ -104,14 +96,24 @@ void MainWindow::on_pushButton_solve_clicked()
 
 void MainWindow::button_pressed(int id){
     int a = id / 9, b = id % 9;
-    button[nowI][nowJ]->setDown(false);
-    qDebug() << "release" << nowI << "," << nowJ;
+    if(nowI != -1 && nowJ != -1){
+        button[nowI][nowJ]->setDown(false);
+        qDebug() << "release" << nowI << "," << nowJ;
+    }
+    if(a == nowI && b == nowJ){ // de-focus any button on the board
+        nowI = -1;
+        nowJ = -1;
+        return;
+    }
     button[a][b]->setDown(true);
     nowI = a;
     nowJ = b;
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *e){
+    if(nowI == -1 || nowJ == -1){ // if no button was focused
+        return;
+    }
     char number = player.getMap(nowI, nowJ);
 
     switch(e->key()){
@@ -200,6 +202,9 @@ void MainWindow::on_pushButton_clear_clicked()
 
 void MainWindow::on_pushButton_hint_clicked()
 {
+    if(nowI == -1 || nowJ == -1){ // if no button was focused
+        return;
+    }
     if(quiz.getMap(nowI, nowJ) == 0){
         Sudoku refAns(quiz);
         refAns.solve();
@@ -213,7 +218,7 @@ void MainWindow::on_pushButton_hint_clicked()
 void MainWindow::on_comboBox_ans_currentIndexChanged(int index)
 {
     qDebug() << "ans index = " << index;
-    if(index < 0 || index > ans.size()){
+    if(index < 0 || index > static_cast<int>(ans.size())){
         return;
     }
     for(int i = 0; i < 9; ++i){
@@ -229,9 +234,9 @@ void MainWindow::on_comboBox_ans_currentIndexChanged(int index)
             if(player.getMap(i, j) != ans.at(index).getMap(i, j)){
                 button[i][j]->setText(QString::number(ans.at(index).getMap(i ,j)));
                 if(player.getMap(i, j) != 0){
-                    button[i][j]->setStyleSheet("color: rgb(237, 28, 36)");
+                    button[i][j]->setStyleSheet(redText);
                 }else{
-                    button[i][j]->setStyleSheet("color: rgb(0, 181, 46);");
+                    button[i][j]->setStyleSheet(blueText);
                 }
             }
         }

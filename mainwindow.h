@@ -41,8 +41,11 @@ private:
     Sudoku player;
     std::vector<Sudoku> ans;
     QPushButton *button[9][9];
-    int nowI = 0, nowJ = 0;
+    int nowI = -1, nowJ = -1;
     bool clickAble = true;
+    QString redText = "color: rgb(237, 28, 36);";  // used to dispaly error
+    QString greenText = "color: rgb(0, 181, 46);"; // used to display answer
+    QString blueText = "color: rgb(47, 56, 176);"; // used to display quiz
 
     Ui::MainWindow *ui;
 };
