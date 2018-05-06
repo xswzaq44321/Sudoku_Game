@@ -6,7 +6,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    QSignalMapper *signalMapper = new QSignalMapper(this);
     ui->pushButton_note->setCheckable(true);
 
     for(int i = 0; i < 9; ++i){
@@ -14,11 +13,11 @@ MainWindow::MainWindow(QWidget *parent) :
             button[i][j] = new QPushButton(this);
             button[i][j]->setGeometry(50 + j * 45 + (j / 3) * 3, 50 + i * 45 + (i / 3) * 3, 50, 50);
             button[i][j]->setFont(QFont("Andy", 22, QFont::Bold));
-            QObject::connect(button[i][j], SIGNAL(clicked()), signalMapper, SLOT(map()));
-            signalMapper->setMapping(button[i][j], i * 9 + j);
+            connect(button[i][j], &QPushButton::clicked, [this, i, j](){
+                button_pressed(i * 9 + j);
+            });
         }
     }
-    connect(signalMapper, SIGNAL(mapped(int)), this, SLOT(button_pressed(int)));
 }
 
 MainWindow::~MainWindow()
