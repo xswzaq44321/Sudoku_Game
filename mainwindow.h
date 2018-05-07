@@ -30,7 +30,7 @@ private slots:
     void on_pushButton_new_clicked();
     void on_comboBox_difficulty_currentIndexChanged(int index);
     void on_pushButton_solve_clicked();
-    void button_pressed(int id);
+    void button_pressed(int i, int j);
     virtual void keyPressEvent(QKeyEvent *e);
     void on_pushButton_clear_clicked();
     void on_pushButton_hint_clicked();

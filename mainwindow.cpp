@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
             button[i][j]->setGeometry(50 + j * 45 + (j / 3) * 3, 50 + i * 45 + (i / 3) * 3, 50, 50);
             button[i][j]->setFont(QFont("Andy", 22, QFont::Bold));
             connect(button[i][j], &QPushButton::clicked, [this, i, j](){
-                button_pressed(i * 9 + j);
+                button_pressed(i, j);
             });
         }
     }
@@ -93,20 +93,19 @@ void MainWindow::on_pushButton_solve_clicked()
     }
 }
 
-void MainWindow::button_pressed(int id){
-    int a = id / 9, b = id % 9;
+void MainWindow::button_pressed(int i, int j){
     if(nowI != -1 && nowJ != -1){
         button[nowI][nowJ]->setDown(false);
         qDebug() << "release" << nowI << "," << nowJ;
     }
-    if(a == nowI && b == nowJ){ // de-focus any button on the board
+    if(i == nowI && j == nowJ){ // de-focus any button on the board
         nowI = -1;
         nowJ = -1;
         return;
     }
-    button[a][b]->setDown(true);
-    nowI = a;
-    nowJ = b;
+    button[i][j]->setDown(true);
+    nowI = i;
+    nowJ = j;
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *e){
@@ -118,22 +117,22 @@ void MainWindow::keyPressEvent(QKeyEvent *e){
     switch(e->key()){
     case Qt::Key_W:
         if(nowI == 0) return;
-        button_pressed((nowI - 1) * 9 + nowJ);
+        button_pressed((nowI - 1), nowJ);
         return;
         break;
     case Qt::Key_S:
         if(nowI == 8) return;
-        button_pressed((nowI + 1) * 9 + nowJ);
+        button_pressed((nowI + 1), nowJ);
         return;
         break;
     case Qt::Key_A:
         if(nowJ == 0) return;
-        button_pressed(nowI * 9 + (nowJ - 1));
+        button_pressed(nowI, (nowJ - 1));
         return;
         break;
     case Qt::Key_D:
         if(nowJ == 8) return;
-        button_pressed(nowI * 9 + (nowJ + 1));
+        button_pressed(nowI, (nowJ + 1));
         return;
         break;
     case Qt::Key_1:
