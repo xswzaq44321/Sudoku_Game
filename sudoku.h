@@ -29,6 +29,7 @@ class Sudoku
         void setDifficulty();
         bool mapIsEmpty();
         bool mapIsFinished();
+        bool hasDuplicate();
     private:
         char map[9][9] = {{0}};
         char note[9][9][9] = {{{0}}};

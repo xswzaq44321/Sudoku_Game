@@ -235,6 +235,9 @@ void Sudoku::bruteSolve(Sudoku quest, vector<Sudoku>& ans){
         return;
     }else{
         for(int num = 1; num <=9; ++num){
+            if(ans.size() > 2000){
+                return;
+            }
             if(quest.checkDuplicate(a, b, num)){
                 continue;
             }
@@ -340,4 +343,17 @@ bool Sudoku::mapIsFinished(){
         }
     }
     return true;
+}
+
+bool Sudoku::hasDuplicate(){
+    for(int i = 0; i < 9; ++i){
+        for(int j = 0; j < 9; ++j){
+            int num = this->getMap(i, j);
+            if(num == 0) continue;
+            if(this->checkDuplicate(i, j, num)){
+                return true;
+            }
+        }
+    }
+    return false;
 }

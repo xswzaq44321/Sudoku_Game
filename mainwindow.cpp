@@ -59,24 +59,29 @@ void MainWindow::on_pushButton_solve_clicked()
 {
     qDebug() << "solve clicked";
     if(player.mapIsEmpty()){
+        ui->player_status->setText("Map is empty!");
         return;
     }
     if(quiz.mapIsEmpty()){
         quiz = player;
     }
+    if(quiz.hasDuplicate()){ // if quiz have duplicate, it's bound to be unsolvable!
+        ui->player_status->setText("Unsolvable!");
+        return;
+    }
     ans.clear();
     quiz.printMap();
     ans = quiz.multiSolve();
+
     qDebug() << "ans.size() = " << ans.size();
     ui->comboBox_ans->addItem("Common Sol");
+    ans[0].printMap();
+    ans[1].printMap();
     for(int i = 1; static_cast<uint>(i) < ans.size(); ++i){ //set combox texts
         char temp[100];
         sprintf(temp, "Sol %d", i); // Sol 0 = Common Sol
         QString qtemp(temp);
         ui->comboBox_ans->addItem(qtemp);
-    }
-    for(std::vector<Sudoku>::iterator it = ans.begin(); it != ans.end(); ++it){
-        it->printMap(); // debug print
     }
 
     for(int i = 0; i < 9; ++i){

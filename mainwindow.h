@@ -43,9 +43,9 @@ private:
     QPushButton *button[9][9];
     int nowI = -1, nowJ = -1;
     bool clickAble = true;
-    QString redText = "color: rgb(237, 28, 36);";  // used to dispaly error
-    QString greenText = "color: rgb(0, 181, 46);"; // used to display answer
-    QString blueText = "color: rgb(47, 56, 176);"; // used to display quiz
+    QString redText = "color: rgb(237, 28, 36);";  // error color
+    QString greenText = "color: rgb(0, 181, 46);"; // answer
+    QString blueText = "color: rgb(47, 56, 176);"; // quiz
 
     Ui::MainWindow *ui;
 };
