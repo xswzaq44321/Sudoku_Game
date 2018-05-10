@@ -18,6 +18,28 @@ MainWindow::MainWindow(QWidget *parent) :
             });
         }
     }
+    for(int i = 0; i < 9; ++i){
+        numberButton[i] = new QPushButton(this);
+        numberButton[i]->setGeometry(90 + i * 50, 490, 41, 41);
+        numberButton[i]->setFont(QFont("Andy", 22, QFont::Bold));
+        numberButton[i]->setText(QString::number(1 + i));
+        connect(numberButton[i], &QPushButton::clicked, [this, i](void){
+            enterNumber(i + 1);
+        });
+    }
+    moveSet.insert(Qt::Key_W);
+    moveSet.insert(Qt::Key_A);
+    moveSet.insert(Qt::Key_S);
+    moveSet.insert(Qt::Key_D);
+    numberSet.insert(Qt::Key_1);
+    numberSet.insert(Qt::Key_2);
+    numberSet.insert(Qt::Key_3);
+    numberSet.insert(Qt::Key_4);
+    numberSet.insert(Qt::Key_5);
+    numberSet.insert(Qt::Key_6);
+    numberSet.insert(Qt::Key_7);
+    numberSet.insert(Qt::Key_8);
+    numberSet.insert(Qt::Key_9);
 }
 
 MainWindow::~MainWindow()
@@ -117,57 +139,35 @@ void MainWindow::keyPressEvent(QKeyEvent *e){
     if(nowI == -1 || nowJ == -1){ // if no button was focused
         return;
     }
-    char number = player.getMap(nowI, nowJ);
 
-    switch(e->key()){
-    case Qt::Key_W:
-        if(nowI == 0) return;
-        button_pressed((nowI - 1), nowJ);
+    if(moveSet.count(e->key())){
+        switch(e->key()){
+        case Qt::Key_W:
+            if(nowI == 0) return;
+            button_pressed((nowI - 1), nowJ);
+            break;
+        case Qt::Key_S:
+            if(nowI == 8) return;
+            button_pressed((nowI + 1), nowJ);
+            break;
+        case Qt::Key_A:
+            if(nowJ == 0) return;
+            button_pressed(nowI, (nowJ - 1));
+            break;
+        case Qt::Key_D:
+            if(nowJ == 8) return;
+            button_pressed(nowI, (nowJ + 1));
+            break;
+        }
         return;
-        break;
-    case Qt::Key_S:
-        if(nowI == 8) return;
-        button_pressed((nowI + 1), nowJ);
-        return;
-        break;
-    case Qt::Key_A:
-        if(nowJ == 0) return;
-        button_pressed(nowI, (nowJ - 1));
-        return;
-        break;
-    case Qt::Key_D:
-        if(nowJ == 8) return;
-        button_pressed(nowI, (nowJ + 1));
-        return;
-        break;
-    case Qt::Key_1:
-        number = 1;
-        break;
-    case Qt::Key_2:
-        number = 2;
-        break;
-    case Qt::Key_3:
-        number = 3;
-        break;
-    case Qt::Key_4:
-        number = 4;
-        break;
-    case Qt::Key_5:
-        number = 5;
-        break;
-    case Qt::Key_6:
-        number = 6;
-        break;
-    case Qt::Key_7:
-        number = 7;
-        break;
-    case Qt::Key_8:
-        number = 8;
-        break;
-    case Qt::Key_9:
-        number = 9;
-        break;
+    }else if(numberSet.count(e->key())){
+        char number = player.getMap(nowI, nowJ);
+        number = e->key() - Qt::Key_0;
+        enterNumber(number);
     }
+}
+
+void MainWindow::enterNumber(int number){
     if(quiz.getMap(nowI, nowJ) == 0 && clickAble){ // you can't fill a number into quiz
         if(player.getMap(nowI, nowJ) == number){
             player.setMap(nowI, nowJ, 0);

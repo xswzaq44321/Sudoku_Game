@@ -10,6 +10,7 @@
 #include <QLayout>
 #include <vector>
 #include <QSignalMapper>
+#include <set>
 #include <QKeyEvent>
 #include "sudoku.h"
 
@@ -41,11 +42,14 @@ private:
     Sudoku player;
     std::vector<Sudoku> ans;
     QPushButton *button[9][9];
+    QPushButton *numberButton[9];
     int nowI = -1, nowJ = -1;
     bool clickAble = true;
     QString redText = "color: rgb(237, 28, 36);";  // error color
     QString greenText = "color: rgb(0, 181, 46);"; // answer
     QString blueText = "color: rgb(47, 56, 176);"; // quiz
+    void enterNumber(int number);
+    set<int> moveSet, numberSet;
 
     Ui::MainWindow *ui;
 };
