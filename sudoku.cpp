@@ -8,6 +8,7 @@
 #define GRN   "\x1B[32m"
 #define CYN   "\x1B[36m"
 #define RESET "\x1B[0m"
+#define ANS_SIZE 2000
 
 Sudoku::Sudoku(){
     srand(time(NULL));
@@ -36,6 +37,26 @@ char Sudoku::getMap(int i, int j)const {
         return -1; // -1 represents fail to get map data
     }
     return map[i][j];
+}
+
+void Sudoku::setNote(int i, int j, int n, char status){
+    if(i < 0 || i > 8 || j < 0 || j > 8 || n < 0 || n > 8){
+        return;
+    }
+    note[i][j][n] = status;
+}
+
+void Sudoku::setNote(int i, int j, const char n[9]){
+    if(i < 0 || i > 8 || j < 0 || j > 8){
+        return;
+    }
+    for(int k = 0; k < 9; ++k){
+        note[i][j][k] = n[k];
+    }
+}
+
+char Sudoku::getNote(int i, int j, int n)const {
+    return note[i][j][n];
 }
 
 void Sudoku::setDif(const char i){
@@ -235,7 +256,7 @@ void Sudoku::bruteSolve(Sudoku quest, vector<Sudoku>& ans){
         return;
     }else{
         for(int num = 1; num <=9; ++num){
-            if(ans.size() > 2000){
+            if(ans.size() > ANS_SIZE){
                 return;
             }
             if(quest.checkDuplicate(a, b, num)){

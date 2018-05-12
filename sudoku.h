@@ -8,6 +8,9 @@ class Sudoku
         Sudoku(const char initMap[][9]);
         void setMap(int i, int j, const char n);
         char getMap(int i, int j)const;
+        void setNote(int i, int j, int n, const char status);
+        void setNote(int i, int j, const char n[9]);
+        char getNote(int i, int j, int n)const;
         void setDif(const char i);
         char getDif()const;
         void setNumberCount(const int i);
