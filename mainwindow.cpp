@@ -92,6 +92,7 @@ void MainWindow::on_pushButton_solve_clicked()
         return;
     }
     ans.clear();
+    ui->comboBox_ans->clear();
     quiz.printMap();
     ans = quiz.multiSolve();
 
