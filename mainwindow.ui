@@ -26,14 +26,14 @@
     <property name="font">
      <font>
       <family>Andy</family>
-      <pointsize>18</pointsize>
+      <pointsize>-1</pointsize>
       <weight>9</weight>
       <italic>false</italic>
       <bold>false</bold>
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">font: 75 18pt &quot;Andy&quot;;</string>
+     <string notr="true">font: 75 24px &quot;Andy&quot;;</string>
     </property>
     <property name="text">
      <string>New Puzzle</string>
@@ -49,7 +49,7 @@
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">font: 75 14pt &quot;Andy&quot;;</string>
+     <string notr="true">font: 75 18px &quot;Andy&quot;;</string>
     </property>
     <item>
      <property name="text">
@@ -92,7 +92,7 @@
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">font: 75 18pt &quot;Andy&quot;;</string>
+     <string notr="true">font: 75 24px &quot;Andy&quot;;</string>
     </property>
     <property name="text">
      <string>Auto Solve</string>
@@ -109,7 +109,7 @@
     </property>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(208, 208, 208);
-font: 75 20pt &quot;Andy&quot;;</string>
+font: 75 26px &quot;Andy&quot;;</string>
     </property>
     <property name="text">
      <string>Status</string>
@@ -128,7 +128,7 @@ font: 75 20pt &quot;Andy&quot;;</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">font: 75 20pt &quot;Andy&quot;;</string>
+     <string notr="true">font: 75 26px &quot;Andy&quot;;</string>
     </property>
     <property name="text">
      <string>Clear</string>
@@ -144,7 +144,7 @@ font: 75 20pt &quot;Andy&quot;;</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">font: 75 20pt &quot;Andy&quot;;</string>
+     <string notr="true">font: 75 26px &quot;Andy&quot;;</string>
     </property>
     <property name="text">
      <string>Hint</string>
@@ -154,13 +154,13 @@ font: 75 20pt &quot;Andy&quot;;</string>
     <property name="geometry">
      <rect>
       <x>540</x>
-      <y>510</y>
+      <y>490</y>
       <width>131</width>
       <height>22</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">font: 75 14pt &quot;Andy&quot;;</string>
+     <string notr="true">font: 75 18px &quot;Andy&quot;;</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_note">
@@ -173,7 +173,7 @@ font: 75 20pt &quot;Andy&quot;;</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">font: 75 14pt &quot;Andy&quot;;</string>
+     <string notr="true">font: 75 18px &quot;Andy&quot;;</string>
     </property>
     <property name="text">
      <string>Note</string>
@@ -190,7 +190,7 @@ font: 75 20pt &quot;Andy&quot;;</string>
     </property>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(208, 208, 208);
-font: 75 20pt &quot;Andy&quot;;</string>
+font: 75 26px &quot;Andy&quot;;</string>
     </property>
     <property name="text">
      <string/>
