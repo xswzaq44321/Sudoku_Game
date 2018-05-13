@@ -114,6 +114,7 @@ void MainWindow::on_pushButton_solve_clicked()
     if(ans.size() > 1){
         ans[1].printMap();
         ui->player_status->setText(QString::number(ans.size() - 1) + "\n solves.");
+        clickAble = false;
     }else{
         ui->player_status->setText("No solve!");
         quiz.clearData(); // if user enter an unsolvable quiz, don't solidify quiz
