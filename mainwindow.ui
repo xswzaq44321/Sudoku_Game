@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>788</width>
-    <height>555</height>
+    <width>724</width>
+    <height>583</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
     <property name="geometry">
      <rect>
       <x>540</x>
-      <y>50</y>
+      <y>70</y>
       <width>131</width>
       <height>61</height>
      </rect>
@@ -26,30 +26,30 @@
     <property name="font">
      <font>
       <family>Andy</family>
-      <pointsize>18</pointsize>
+      <pointsize>-1</pointsize>
       <weight>9</weight>
       <italic>false</italic>
       <bold>false</bold>
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">font: 75 18pt &quot;Andy&quot;;</string>
+     <string notr="true">font: 75 24px &quot;Andy&quot;;</string>
     </property>
     <property name="text">
      <string>New Puzzle</string>
     </property>
    </widget>
-   <widget class="QComboBox" name="comboBox">
+   <widget class="QComboBox" name="comboBox_difficulty">
     <property name="geometry">
      <rect>
       <x>540</x>
-      <y>120</y>
+      <y>140</y>
       <width>131</width>
       <height>22</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">font: 75 14pt &quot;Andy&quot;;</string>
+     <string notr="true">font: 75 18px &quot;Andy&quot;;</string>
     </property>
     <item>
      <property name="text">
@@ -86,16 +86,117 @@
     <property name="geometry">
      <rect>
       <x>540</x>
-      <y>370</y>
+      <y>420</y>
       <width>131</width>
       <height>61</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">font: 75 18pt &quot;Andy&quot;;</string>
+     <string notr="true">font: 75 24px &quot;Andy&quot;;</string>
     </property>
     <property name="text">
      <string>Auto Solve</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="player_status">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>340</y>
+      <width>131</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(208, 208, 208);
+font: 75 26px &quot;Andy&quot;;</string>
+    </property>
+    <property name="text">
+     <string>Status</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_clear">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>180</y>
+      <width>131</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 75 26px &quot;Andy&quot;;</string>
+    </property>
+    <property name="text">
+     <string>Clear</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_hint">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>260</y>
+      <width>131</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 75 26px &quot;Andy&quot;;</string>
+    </property>
+    <property name="text">
+     <string>Hint</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBox_ans">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>490</y>
+      <width>131</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 75 18px &quot;Andy&quot;;</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_note">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>490</y>
+      <width>41</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 75 18px &quot;Andy&quot;;</string>
+    </property>
+    <property name="text">
+     <string>Note</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="gameTimeLabel">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>20</y>
+      <width>131</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(208, 208, 208);
+font: 75 26px &quot;Andy&quot;;</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
   </widget>

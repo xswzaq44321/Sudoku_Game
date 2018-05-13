@@ -1,5 +1,33 @@
 <RCC>
-    <qresource prefix="/numbers">
-        <file alias="number_empty_selected">res/number_empty_selected.png</file>
+    <qresource prefix="/block">
+        <file>res/block_blue_GIF.gif</file>
+        <file>res/block_blue1.png</file>
+        <file>res/block_blue2.png</file>
+        <file>res/block_blue3.png</file>
+        <file>res/block_blue4.png</file>
+        <file>res/block_blue5.png</file>
+        <file>res/block_blue6.png</file>
+        <file>res/block_white_GIF.gif</file>
+        <file>res/block_white1.png</file>
+        <file>res/block_white2.png</file>
+        <file>res/block_white3.png</file>
+        <file>res/block_white4.png</file>
+        <file>res/block_white5.png</file>
+        <file>res/block_white6.png</file>
+    </qresource>
+    <qresource prefix="/number">
+        <file>res/number_0.png</file>
+        <file>res/number_1.png</file>
+        <file>res/number_2.png</file>
+        <file>res/number_3.png</file>
+        <file>res/number_4.png</file>
+        <file>res/number_5.png</file>
+        <file>res/number_6.png</file>
+        <file>res/number_7.png</file>
+        <file>res/number_8.png</file>
+        <file>res/number_9.png</file>
+    </qresource>
+    <qresource prefix="/background">
+        <file>res/background.png</file>
     </qresource>
 </RCC>
