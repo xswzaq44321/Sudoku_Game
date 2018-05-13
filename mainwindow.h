@@ -60,7 +60,7 @@ private:
     QString blueText = "color: rgb(47, 56, 176);"; // quiz
     QString normalNumber = "font:36px;";
     QString noteNumber = "font:13px; color: rgb(100, 100, 100);";
-    set<int> moveSet, numberSet;
+    set<int> moveSet, numberSet, eraseSet;
     QTimer *myTimer;
     QTime gameTime;
 

@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
     for(int i = 0; i < 9; ++i){ // set up buttons
         for(int j = 0; j < 9; ++j){
             button[i][j] = new QPushButton(this);
-            button[i][j]->setGeometry(50 + j * 45 + (j / 3) * 3, 50 + i * 45 + (i / 3) * 3, 50, 50);
+            button[i][j]->setGeometry(50 + j * 45 + (j / 3) * 5, 50 + i * 45 + (i / 3) * 5, 50, 50);
             button[i][j]->setFont(QFont("Andy", QFont::Bold));
             button[i][j]->setStyleSheet(normalNumber);
             button[i][j]->setText("");
@@ -43,8 +43,13 @@ MainWindow::MainWindow(QWidget *parent) :
     numberSet.insert(Qt::Key_7);
     numberSet.insert(Qt::Key_8);
     numberSet.insert(Qt::Key_9);
+    eraseSet.insert(Qt::Key_Delete);
+    eraseSet.insert(Qt::Key_Backspace);
+    eraseSet.insert(Qt::Key_0);
     myTimer = new QTimer(this);
     myTimer->start(100);
+    connect(ui->pushButton_solve, SIGNAL(clicked(bool)), this, SLOT(timeStop()));
+    connect(ui->pushButton_clear, SIGNAL(clicked(bool)), this, SLOT(timeStop()));
 }
 
 MainWindow::~MainWindow()
@@ -64,6 +69,7 @@ void MainWindow::on_pushButton_new_clicked()
             button[i][j]->setStyleSheet(normalNumber);
         }
     }
+
     quiz.create();
     player = quiz;
     quiz.printMap();
@@ -110,6 +116,7 @@ void MainWindow::on_pushButton_solve_clicked()
         ui->player_status->setText(QString::number(ans.size() - 1) + "\n solves.");
     }else{
         ui->player_status->setText("No solve!");
+        quiz.clearData(); // if user enter an unsolvable quiz, don't solidify quiz
     }
     for(int i = 1; static_cast<uint>(i) < ans.size(); ++i){ //set combox texts
         char temp[100];
@@ -117,7 +124,6 @@ void MainWindow::on_pushButton_solve_clicked()
         QString qtemp(temp);
         ui->comboBox_ans->addItem(qtemp);
     }
-
     for(int i = 0; i < 9; ++i){
         for(int j = 0; j < 9; ++j){
             if(player.getMap(i, j) != ans[0].getMap(i, j)){
@@ -171,29 +177,38 @@ void MainWindow::keyPressEvent(QKeyEvent *e){
             button_pressed(nowI, (nowJ + 1));
             break;
         }
-        return;
     }else if(numberSet.count(e->key())){
         char number = player.getMap(nowI, nowJ);
         number = e->key() - Qt::Key_0;
-        qDebug() << "noteMode = " << noteMode;
         enterHandel(number);
     }else if(e->key() == Qt::Key_N){
         ui->pushButton_note->setChecked(!(noteMode));
+    }else if(eraseSet.count(e->key())){
+        if(noteMode){
+            for(int i = 1; i <= 9; ++i){
+                if(player.getNote(nowI, nowJ, i - 1) == 1){
+                    enterNote(i);
+                }
+            }
+        }else{
+            enterNumber(player.getMap(nowI, nowJ));
+        }
     }
 }
 
 void MainWindow::enterNumber(int number){
     if(quiz.getMap(nowI, nowJ) == 0 && clickAble){ // you can't fill a number into quiz
-        if(player.getMap(nowI, nowJ) == number){
+        if(player.getMap(nowI, nowJ) == number){ // if number has aleady been taken
             player.setMap(nowI, nowJ, 0);
             button[nowI][nowJ]->setText("");
         }else{
             button[nowI][nowJ]->setStyleSheet(normalNumber);
+            player.clearNote(nowI, nowJ);
             player.setMap(nowI, nowJ, number);
             button[nowI][nowJ]->setText(QString::number(number));
         }
-        if(player.mapIsFinished()){
-            if(player.isCorrect()){ // player win
+        if(player.mapIsFinished()){ // check if finish
+            if(player.isCorrect()){
                 ui->player_status->setText("You Win!");
                 clickAble = false;
                 timeStop();
@@ -205,9 +220,9 @@ void MainWindow::enterNumber(int number){
 }
 
 void MainWindow::enterNote(int number){
-    if(quiz.getMap(nowI, nowJ) == 0 && clickAble && player.getMap(nowI, nowJ) == 0){
+    if(player.getMap(nowI, nowJ) == 0 && clickAble){
         button[nowI][nowJ]->setStyleSheet(noteNumber);
-        if(player.getNote(nowI, nowJ, number - 1)){
+        if(player.getNote(nowI, nowJ, number - 1)){ // if note has aleady been taken
             player.setNote(nowI, nowJ, number - 1, 0);
             QString temp = button[nowI][nowJ]->text();
             temp.replace(number - 1 + (number - 1) / 3, 1, " ");
@@ -220,7 +235,7 @@ void MainWindow::enterNote(int number){
                     temp[i + i / 3] = '0' + i + 1;
                 }
             }
-            qDebug() << "temp = " << temp;
+            qDebug() << "note content = " << temp;
             button[nowI][nowJ]->setText(QString::fromLocal8Bit(temp));
         }
     }
@@ -234,7 +249,6 @@ void MainWindow::on_pushButton_clear_clicked()
     clickAble = true;
     ui->player_status->setText("Status");
     ui->comboBox_ans->clear();
-    timeStop();
     ui->gameTimeLabel->clear();
     for(int i = 0; i < 9; ++i){
         for(int j = 0; j < 9; ++j){
@@ -304,6 +318,7 @@ void MainWindow::timeStop(){
 
 void MainWindow::on_pushButton_note_toggled(bool checked)
 {
+    qDebug() << "noteMode = " << noteMode;
     noteMode = checked;
 }
 
