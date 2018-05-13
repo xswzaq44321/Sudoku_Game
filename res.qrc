@@ -26,8 +26,48 @@
         <file>res/number_7.png</file>
         <file>res/number_8.png</file>
         <file>res/number_9.png</file>
+        <file>res/number_blue_0.png</file>
+        <file>res/number_blue_1.png</file>
+        <file>res/number_blue_2.png</file>
+        <file>res/number_blue_3.png</file>
+        <file>res/number_blue_4.png</file>
+        <file>res/number_blue_5.png</file>
+        <file>res/number_blue_6.png</file>
+        <file>res/number_blue_7.png</file>
+        <file>res/number_blue_8.png</file>
+        <file>res/number_blue_9.png</file>
+        <file>res/number_green_0.png</file>
+        <file>res/number_green_1.png</file>
+        <file>res/number_green_2.png</file>
+        <file>res/number_green_3.png</file>
+        <file>res/number_green_4.png</file>
+        <file>res/number_green_5.png</file>
+        <file>res/number_green_6.png</file>
+        <file>res/number_green_7.png</file>
+        <file>res/number_green_8.png</file>
+        <file>res/number_green_9.png</file>
+        <file>res/number_red_0.png</file>
+        <file>res/number_red_1.png</file>
+        <file>res/number_red_2.png</file>
+        <file>res/number_red_3.png</file>
+        <file>res/number_red_4.png</file>
+        <file>res/number_red_5.png</file>
+        <file>res/number_red_6.png</file>
+        <file>res/number_red_7.png</file>
+        <file>res/number_red_8.png</file>
+        <file>res/number_red_9.png</file>
     </qresource>
     <qresource prefix="/background">
         <file>res/background.png</file>
+    </qresource>
+    <qresource prefix="/text">
+        <file>res/text_Note.png</file>
+        <file>res/text_NewPuzzle.png</file>
+        <file>res/text_AutoSolve.png</file>
+        <file>res/text_Clear.png</file>
+        <file>res/text_Hint.png</file>
+    </qresource>
+    <qresource prefix="/font">
+        <file alias="Andy">res/Andy_Bold.ttf</file>
     </qresource>
 </RCC>
