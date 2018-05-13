@@ -210,7 +210,6 @@ char Sudoku::checkSpecial(int a, int b){
 
 char Sudoku::check(int a, int b){
     char howMany = 0, whatIsIt = 0;
-    takeNote(a, b);
     for(int i = 0; i < 9; ++i){
         if(note[a][b][i] == 1){ // check how many element are in the note
             howMany++;
@@ -224,11 +223,19 @@ char Sudoku::check(int a, int b){
         return whatIsIt + 1;
     }
 
-    return initial ? 0 : checkSpecial(a, b);
+    return checkSpecial(a, b);
 }
 
 void Sudoku::solve(){
     int upDate;
+    for(int i = 0; i < 9; ++i){
+        for(int j = 0; j < 9; ++j){
+            if(map[i][j] == 0){
+                takeNote(i, j);
+            }
+        }
+    }
+    initial = false;
     do{
         upDate = 0;
         for(int i = 0; i < 9; ++i){
@@ -238,11 +245,15 @@ void Sudoku::solve(){
                     if(map[i][j] != 0){ // if up date success
                         ++upDate;
                         clearNote(i, j);
+                        for(int k = 0; k < 9; ++k){
+                            takeNote(k, j);
+                            takeNote(i, k);
+                            takeNote(BLOCKI(i, k), BLOCKJ(j, k));
+                        }
                     }
                 }
             }
         }
-        initial = false;
     }while(upDate);
 }
 
@@ -274,7 +285,11 @@ vector<Sudoku> Sudoku::multiSolve(){
     vector<Sudoku> answer;
     temp.solve();
     answer.push_back(temp);
-    temp.bruteSolve(temp, answer);
+    if(temp.isCorrect()){
+        answer.push_back(temp);
+    }else{
+        temp.bruteSolve(temp, answer);
+    }
     return answer;
 }
 
