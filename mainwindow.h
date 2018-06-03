@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QPixmap>
+#include <QPainter>
 #include <QIcon>
 #include <QSize>
 #include <QDebug>
@@ -14,6 +15,7 @@
 #include <QKeyEvent>
 #include <QTimer>
 #include <QTime>
+#include <QToolButton>
 #include "sudoku.h"
 
 namespace Ui {
@@ -27,6 +29,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    void loadResource();
 
 private slots:
 
@@ -43,26 +46,33 @@ private slots:
     void displayTime();
     void timeStart();
     void timeStop();
-    void on_pushButton_note_toggled(bool checked);
+    void on_toolButton_note_toggled(bool checked);
     void enterHandel(int number);
+    void animation(int i, int j);
+
 
 private:
     Sudoku quiz;
     Sudoku player;
     std::vector<Sudoku> ans;
-    QPushButton *button[9][9];
-    QPushButton *numberButton[9];
+    QToolButton *button[9][9];
+    QToolButton *numberButton[9];
     int nowI = -1, nowJ = -1;
     bool clickAble = true;
     bool noteMode = false;
-    QString redText = "color: rgb(237, 28, 36);";  // error color
-    QString greenText = "color: rgb(0, 181, 46);"; // answer
-    QString blueText = "color: rgb(47, 56, 176);"; // quiz
-    QString normalNumber = "font:36px;";
-    QString noteNumber = "font:13px; color: rgb(100, 100, 100);";
-    set<int> moveSet, numberSet, eraseSet;
     QTimer *myTimer;
+    QTimer *imageTimer;
     QTime gameTime;
+    set<int> moveSet, numberSet, eraseSet;
+    QIcon numberIcon[10];
+    QIcon numberIconRed[10];
+    QIcon numberIconGreen[10];
+    QIcon numberIconBlue[10];
+    QString blockIconBlue[6];
+    QString blockIconWhite[6];
+    QPixmap numberPixmap[10];
+    QPixmap *collage;
+    QPainter *painter;
 
     Ui::MainWindow *ui;
 };

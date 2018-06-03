@@ -6,30 +6,57 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->pushButton_note->setCheckable(true);
 
+    loadResource();
+    QFont font("Andy");
+    font.setPixelSize(18);
+    ui->toolButton_note->setCheckable(true);
+    ui->toolButton_note->setFont(font);
+    ui->toolButton_note->setStyleSheet(blockIconWhite[0]);
+    ui->toolButton_note->setIconSize(QSize(36,36));
     for(int i = 0; i < 9; ++i){ // set up buttons
         for(int j = 0; j < 9; ++j){
-            button[i][j] = new QPushButton(this);
-            button[i][j]->setGeometry(50 + j * 45 + (j / 3) * 5, 50 + i * 45 + (i / 3) * 5, 50, 50);
-            button[i][j]->setFont(QFont("Andy", QFont::Bold));
-            button[i][j]->setStyleSheet(normalNumber);
-            button[i][j]->setText("");
-            connect(button[i][j], &QPushButton::clicked, [this, i, j](){
+            button[i][j] = new QToolButton(this);
+            button[i][j]->setGeometry(50 + j * 50, 50 + i * 50, 50, 50);
+            if((i / 3 == 1 && j / 3 != 1) || (i / 3 != 1 && j / 3 == 1)){
+                button[i][j]->setStyleSheet(blockIconBlue[0]);
+            }else{
+                button[i][j]->setStyleSheet(blockIconWhite[0]);
+            }
+            button[i][j]->setIconSize(QSize(36, 36));
+            connect(button[i][j], &QToolButton::clicked, [this, i, j](){
                 button_pressed(i, j);
             });
         }
     }
     for(int i = 0; i < 9; ++i){ // set up number buttons
-        numberButton[i] = new QPushButton(this);
-        numberButton[i]->setGeometry(90 + i * 50, 490, 41, 41);
-        numberButton[i]->setFont(QFont("Andy", QFont::Bold));
-        numberButton[i]->setStyleSheet(normalNumber);
-        numberButton[i]->setText(QString::number(1 + i));
-        connect(numberButton[i], &QPushButton::clicked, [this, i](void){
+        numberButton[i] = new QToolButton(this);
+        numberButton[i]->setGeometry(90 + i * 50, 530, 41, 41);
+        if(i / 3 == 1){
+            numberButton[i]->setStyleSheet(blockIconBlue[0]);
+        }else{
+            numberButton[i]->setStyleSheet(blockIconWhite[0]);
+        }
+        numberButton[i]->setIcon(numberIcon[i + 1]);
+        numberButton[i]->setIconSize(QSize(36, 36));
+        connect(numberButton[i], &QToolButton::clicked, [this, i](void){
             enterHandel(i + 1);
         });
     }
+    myTimer = new QTimer(this);
+    myTimer->start(100);
+    imageTimer = new QTimer(this);
+    imageTimer->start(75);
+    connect(ui->pushButton_solve, SIGNAL(clicked(bool)), this, SLOT(timeStop()));
+    connect(ui->pushButton_clear, SIGNAL(clicked(bool)), this, SLOT(timeStop()));
+}
+
+MainWindow::~MainWindow()
+{
+    delete ui;
+}
+
+void MainWindow::loadResource(){
     moveSet.insert(Qt::Key_W);
     moveSet.insert(Qt::Key_A);
     moveSet.insert(Qt::Key_S);
@@ -46,15 +73,68 @@ MainWindow::MainWindow(QWidget *parent) :
     eraseSet.insert(Qt::Key_Delete);
     eraseSet.insert(Qt::Key_Backspace);
     eraseSet.insert(Qt::Key_0);
-    myTimer = new QTimer(this);
-    myTimer->start(100);
-    connect(ui->pushButton_solve, SIGNAL(clicked(bool)), this, SLOT(timeStop()));
-    connect(ui->pushButton_clear, SIGNAL(clicked(bool)), this, SLOT(timeStop()));
-}
-
-MainWindow::~MainWindow()
-{
-    delete ui;
+    numberIcon[0] = QIcon(":/number/res/number_0.png");
+    numberIcon[1] = QIcon(":/number/res/number_1.png");
+    numberIcon[2] = QIcon(":/number/res/number_2.png");
+    numberIcon[3] = QIcon(":/number/res/number_3.png");
+    numberIcon[4] = QIcon(":/number/res/number_4.png");
+    numberIcon[5] = QIcon(":/number/res/number_5.png");
+    numberIcon[6] = QIcon(":/number/res/number_6.png");
+    numberIcon[7] = QIcon(":/number/res/number_7.png");
+    numberIcon[8] = QIcon(":/number/res/number_8.png");
+    numberIcon[9] = QIcon(":/number/res/number_9.png");
+    numberIconRed[0] = QIcon(":/number/res/number_red_0.png");
+    numberIconRed[1] = QIcon(":/number/res/number_red_1.png");
+    numberIconRed[2] = QIcon(":/number/res/number_red_2.png");
+    numberIconRed[3] = QIcon(":/number/res/number_red_3.png");
+    numberIconRed[4] = QIcon(":/number/res/number_red_4.png");
+    numberIconRed[5] = QIcon(":/number/res/number_red_5.png");
+    numberIconRed[6] = QIcon(":/number/res/number_red_6.png");
+    numberIconRed[7] = QIcon(":/number/res/number_red_7.png");
+    numberIconRed[8] = QIcon(":/number/res/number_red_8.png");
+    numberIconRed[9] = QIcon(":/number/res/number_red_9.png");
+    numberIconGreen[0] = QIcon(":/number/res/number_green_0.png");
+    numberIconGreen[1] = QIcon(":/number/res/number_green_1.png");
+    numberIconGreen[2] = QIcon(":/number/res/number_green_2.png");
+    numberIconGreen[3] = QIcon(":/number/res/number_green_3.png");
+    numberIconGreen[4] = QIcon(":/number/res/number_green_4.png");
+    numberIconGreen[5] = QIcon(":/number/res/number_green_5.png");
+    numberIconGreen[6] = QIcon(":/number/res/number_green_6.png");
+    numberIconGreen[7] = QIcon(":/number/res/number_green_7.png");
+    numberIconGreen[8] = QIcon(":/number/res/number_green_8.png");
+    numberIconGreen[9] = QIcon(":/number/res/number_green_9.png");
+    numberIconBlue[0] = QIcon(":/number/res/number_blue_0.png");
+    numberIconBlue[1] = QIcon(":/number/res/number_blue_1.png");
+    numberIconBlue[2] = QIcon(":/number/res/number_blue_2.png");
+    numberIconBlue[3] = QIcon(":/number/res/number_blue_3.png");
+    numberIconBlue[4] = QIcon(":/number/res/number_blue_4.png");
+    numberIconBlue[5] = QIcon(":/number/res/number_blue_5.png");
+    numberIconBlue[6] = QIcon(":/number/res/number_blue_6.png");
+    numberIconBlue[7] = QIcon(":/number/res/number_blue_7.png");
+    numberIconBlue[8] = QIcon(":/number/res/number_blue_8.png");
+    numberIconBlue[9] = QIcon(":/number/res/number_blue_9.png");
+    blockIconBlue[0] = "border-image:url(:/block/res/block_blue1.png);";
+    blockIconBlue[1] = "border-image:url(:/block/res/block_blue2.png);";
+    blockIconBlue[2] = "border-image:url(:/block/res/block_blue3.png);";
+    blockIconBlue[3] = "border-image:url(:/block/res/block_blue4.png);";
+    blockIconBlue[4] = "border-image:url(:/block/res/block_blue5.png);";
+    blockIconBlue[5] = "border-image:url(:/block/res/block_blue6.png);";
+    blockIconWhite[0] = "border-image:url(:/block/res/block_white1.png);";
+    blockIconWhite[1] = "border-image:url(:/block/res/block_white2.png);";
+    blockIconWhite[2] = "border-image:url(:/block/res/block_white3.png);";
+    blockIconWhite[3] = "border-image:url(:/block/res/block_white4.png);";
+    blockIconWhite[4] = "border-image:url(:/block/res/block_white5.png);";
+    blockIconWhite[5] = "border-image:url(:/block/res/block_white6.png);";
+    numberPixmap[0] = QPixmap(":/number/res/number_0.png");
+    numberPixmap[1] = QPixmap(":/number/res/number_1.png");
+    numberPixmap[2] = QPixmap(":/number/res/number_2.png");
+    numberPixmap[3] = QPixmap(":/number/res/number_3.png");
+    numberPixmap[4] = QPixmap(":/number/res/number_4.png");
+    numberPixmap[5] = QPixmap(":/number/res/number_5.png");
+    numberPixmap[6] = QPixmap(":/number/res/number_6.png");
+    numberPixmap[7] = QPixmap(":/number/res/number_7.png");
+    numberPixmap[8] = QPixmap(":/number/res/number_8.png");
+    numberPixmap[9] = QPixmap(":/number/res/number_9.png");
 }
 
 void MainWindow::on_pushButton_new_clicked()
@@ -65,8 +145,7 @@ void MainWindow::on_pushButton_new_clicked()
     ui->player_status->setText("Ongoing...\n:)");
     for(int i = 0; i < 9; ++i){
         for(int j = 0; j < 9; ++j){
-            button[i][j]->setText("");
-            button[i][j]->setStyleSheet(normalNumber);
+            button[i][j]->setIcon(QIcon());
         }
     }
 
@@ -76,8 +155,7 @@ void MainWindow::on_pushButton_new_clicked()
     for(int i = 0; i < 9; ++i){
         for(int j = 0; j < 9; ++j){
             if(quiz.getMap(i, j) != 0){
-                button[i][j]->setText(QString::number(quiz.getMap(i, j)));
-                button[i][j]->setStyleSheet(normalNumber + blueText);
+                button[i][j]->setIcon(numberIconBlue[static_cast<int>(quiz.getMap(i, j))]);
             }
         }
     }
@@ -128,11 +206,10 @@ void MainWindow::on_pushButton_solve_clicked()
     for(int i = 0; i < 9; ++i){
         for(int j = 0; j < 9; ++j){
             if(player.getMap(i, j) != ans[0].getMap(i, j)){
-                button[i][j]->setText(QString::number(ans[0].getMap(i, j)));
                 if(player.getMap(i, j) != 0){
-                    button[i][j]->setStyleSheet(normalNumber + redText);
+                    button[i][j]->setIcon(numberIconRed[static_cast<int>(ans[0].getMap(i, j))]);
                 }else{
-                    button[i][j]->setStyleSheet(normalNumber + greenText);
+                    button[i][j]->setIcon(numberIconGreen[static_cast<int>(ans[0].getMap(i, j))]);
                 }
             }
         }
@@ -141,7 +218,12 @@ void MainWindow::on_pushButton_solve_clicked()
 
 void MainWindow::button_pressed(int i, int j){
     if(nowI != -1 && nowJ != -1){
-        button[nowI][nowJ]->setDown(false);
+        disconnect(imageTimer, SIGNAL(timeout()), 0, 0);
+        if((nowI / 3 == 1 && nowJ / 3 != 1) || (nowI / 3 != 1 && nowJ / 3 == 1)){
+            button[nowI][nowJ]->setStyleSheet(blockIconBlue[0]);
+        }else{
+            button[nowI][nowJ]->setStyleSheet(blockIconWhite[0]);
+        }
         qDebug() << "release" << nowI << "," << nowJ;
     }
     if(i == nowI && j == nowJ){ // de-focus any button on the board
@@ -149,7 +231,9 @@ void MainWindow::button_pressed(int i, int j){
         nowJ = -1;
         return;
     }
-    button[i][j]->setDown(true);
+    connect(imageTimer, &QTimer::timeout, [this, i, j](void){
+        animation(i, j);
+    });
     nowI = i;
     nowJ = j;
 }
@@ -183,7 +267,7 @@ void MainWindow::keyPressEvent(QKeyEvent *e){
         number = e->key() - Qt::Key_0;
         enterHandel(number);
     }else if(e->key() == Qt::Key_N){
-        ui->pushButton_note->setChecked(!(noteMode));
+        on_toolButton_note_toggled(!noteMode);
     }else if(eraseSet.count(e->key())){
         if(noteMode){
             for(int i = 1; i <= 9; ++i){
@@ -202,11 +286,11 @@ void MainWindow::enterNumber(int number){
         if(player.getMap(nowI, nowJ) == number){ // if number has aleady been taken
             player.setMap(nowI, nowJ, 0);
             button[nowI][nowJ]->setText("");
+            button[nowI][nowJ]->setIcon(QIcon());
         }else{
-            button[nowI][nowJ]->setStyleSheet(normalNumber);
             player.clearNote(nowI, nowJ);
             player.setMap(nowI, nowJ, number);
-            button[nowI][nowJ]->setText(QString::number(number));
+            button[nowI][nowJ]->setIcon(numberIcon[number]);
         }
         if(player.mapIsFinished()){ // check if finish
             if(player.isCorrect()){
@@ -222,23 +306,21 @@ void MainWindow::enterNumber(int number){
 
 void MainWindow::enterNote(int number){
     if(player.getMap(nowI, nowJ) == 0 && clickAble){
-        button[nowI][nowJ]->setStyleSheet(noteNumber);
         if(player.getNote(nowI, nowJ, number - 1)){ // if note has aleady been taken
             player.setNote(nowI, nowJ, number - 1, 0);
-            QString temp = button[nowI][nowJ]->text();
-            temp.replace(number - 1 + (number - 1) / 3, 1, " ");
-            button[nowI][nowJ]->setText(temp);
         }else{
             player.setNote(nowI, nowJ, number - 1, 1);
-            char temp[12] = "   \n   \n   ";
-            for(int i = 0; i < 9; ++i){
-                if(player.getNote(nowI, nowJ, i) == 1){
-                    temp[i + i / 3] = '0' + i + 1;
-                }
-            }
-            qDebug() << "note content = " << temp;
-            button[nowI][nowJ]->setText(QString::fromLocal8Bit(temp));
         }
+        collage = new QPixmap(300, 300);
+        collage->fill(Qt::transparent);
+        painter = new QPainter(collage);
+        for(int i = 0; i < 9; ++i){
+            if(player.getNote(nowI, nowJ, i) == 1){
+                painter->drawPixmap((i % 3) * 100, (i / 3) * 100, 100, 100, numberPixmap[i + 1]);
+            }
+        }
+        button[nowI][nowJ]->setIcon(*collage);
+        delete collage;
     }
 }
 
@@ -253,8 +335,7 @@ void MainWindow::on_pushButton_clear_clicked()
     ui->gameTimeLabel->clear();
     for(int i = 0; i < 9; ++i){
         for(int j = 0; j < 9; ++j){
-            button[i][j]->setText("");
-            button[i][j]->setStyleSheet("");
+            button[i][j]->setIcon(QIcon());
         }
     }
 }
@@ -282,19 +363,17 @@ void MainWindow::on_comboBox_ans_currentIndexChanged(int index)
     for(int i = 0; i < 9; ++i){
         for(int j = 0; j < 9; ++j){
             if(player.getMap(i, j) == 0){
-                button[i][j]->setText("");
-                button[i][j]->setStyleSheet("");
+                button[i][j]->setIcon(QIcon());
             }
         }
     }
     for(int i = 0; i < 9; ++i){
         for(int j = 0; j < 9; ++j){
             if(player.getMap(i, j) != ans.at(index).getMap(i, j)){
-                button[i][j]->setText(QString::number(ans.at(index).getMap(i ,j)));
                 if(player.getMap(i, j) != 0){
-                    button[i][j]->setStyleSheet(normalNumber + redText);
+                    button[i][j]->setIcon(numberIconRed[static_cast<int>(ans.at(index).getMap(i, j))]);
                 }else{
-                    button[i][j]->setStyleSheet(normalNumber + greenText);
+                    button[i][j]->setIcon(numberIconGreen[static_cast<int>(ans.at(index).getMap(i, j))]);
                 }
             }
         }
@@ -317,10 +396,15 @@ void MainWindow::timeStop(){
     disconnect(myTimer, &QTimer::timeout, this, &MainWindow::displayTime);
 }
 
-void MainWindow::on_pushButton_note_toggled(bool checked)
+void MainWindow::on_toolButton_note_toggled(bool checked)
 {
     qDebug() << "noteMode = " << noteMode;
     noteMode = checked;
+    if(noteMode){
+        ui->toolButton_note->setStyleSheet(blockIconWhite[3]);
+    }else{
+        ui->toolButton_note->setStyleSheet(blockIconWhite[0]);
+    }
 }
 
 void MainWindow::enterHandel(int number){
@@ -329,4 +413,20 @@ void MainWindow::enterHandel(int number){
     }else{
         enterNumber(number);
     }
+}
+
+void MainWindow::animation(int i, int j){
+    static int frame = 0, direction = 1;
+    if((i / 3 == 1 && j / 3 != 1) || (i / 3 != 1 && j / 3 == 1)){
+        button[i][j]->setStyleSheet(blockIconBlue[frame]);
+    }else{
+        button[i][j]->setStyleSheet(blockIconWhite[frame]);
+    }
+    if(frame >= 5){
+        direction = -1;
+    }
+    if(frame <= 0){
+        direction = 1;
+    }
+    frame += direction;
 }
